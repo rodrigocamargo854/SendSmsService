@@ -1,6 +1,5 @@
 using System;
 using System.Text;
-using System.Text.Json;
 using Domain.Models.SendEntities;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
@@ -14,9 +13,9 @@ namespace MenssagerBrokers
         {
             var factory = new ConnectionFactory()
             {
-                HostName = "localhost",
-                UserName = "achebarato",
-                Password = "getout1123"
+                HostName = "eagle-01.rmq.cloudamqp.com",
+                UserName = "snyrhojh",
+                Password = "oDLO59ZkdvrV1GUxBmxflwGiuZeK9zL7"
             };
             using (var connection = factory.CreateConnection())
             using (var channel = connection.CreateModel())
@@ -37,6 +36,7 @@ namespace MenssagerBrokers
                         var body = ea.Body.ToArray();
                         var message = Encoding.UTF8.GetString(body);
                         var entity = JsonConvert.DeserializeObject<SenderEntity>(message);
+                        Console.WriteLine($"Estou aqui ouvindo: {entity.ToString()}");
                         PostSms.SendSms(entity);
                         channel.BasicAck(ea.DeliveryTag, false);
                     }
